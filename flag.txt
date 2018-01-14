@@ -1,0 +1,14 @@
+(strings ./flag)
+Unpack with upx https://upx.github.io/
+upx -d ./flag
+hexdump -C flag | grep -5 UPX
+
+
+-----------------------------------------------------------------
+| flag:  | UPX...? sounds like a delivery service :)	        |
+-----------------------------------------------------------------
+
+
+
+
+

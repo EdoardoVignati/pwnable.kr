@@ -1,0 +1,104 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+public class Pwn {
+
+	static boolean b = false;
+	static String answer = "";
+	static BufferedWriter output = null;
+	static BufferedReader input = null;
+	static Process process;
+	static Runtime rt = null;
+	static String n = "";
+
+	public static void main(String[] args) throws IOException {
+
+		rt = Runtime.getRuntime();
+
+		try {
+
+			process = rt.exec(new String[] { "bash", "-c", "nc localhost 9007" });
+
+			input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			output = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
+
+			String line = null;
+
+			int inf = 1;
+			int sup = 0;
+
+			while ((line = input.readLine()) != null) {
+
+				if (line.contains("N=") && line.contains("C=") && !line.contains("Server")) {
+
+					sup = Integer.parseInt(line.split("=")[1].split(" ")[0]);
+					System.out.println(line);
+					ricBin(inf, sup);
+
+				} else
+					System.out.println(line);
+
+			}
+
+			int exitVal = process.waitFor();
+
+			System.out.println("Exit Value: " + exitVal);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static int ricBin(int low, int high) throws NumberFormatException, IOException, InterruptedException {
+
+		while (true) {
+
+			int mid = (low + high) >>> 1;
+
+			answer = "";
+
+			for (int i = low; i <= mid; i++) {
+				answer = answer + " " + i;
+			}
+			//System.out.println("Provo: " + answer);
+			//System.out.println("Provo: " + low + "~" + mid);
+
+			output.write(answer + "\n");
+			output.flush();
+
+			n = input.readLine();
+
+			System.out.println(n);
+
+			if (n.contains("Correct!")) {
+				//System.out.println("vinto");
+				return 1;
+
+			}
+
+			if (Integer.parseInt(n) % 2 == 0)
+				return ricBin(mid + 1, high);
+
+			else
+				return ricBin(low, mid);
+
+		}
+
+	}
+}
+
+
+I wrote this .java that execute the binary search, then compiled and uploaded to the server.
+
+Compilazione:
+$ gcj --main=Pwn Pwn.java
+Caricato con scp sul server a uaf@pwnable.kr
+
+-------------------------------------------------
+| flag   |  b1NaRy_S34rch1nG_1s_3asy_p3asy	|
+-------------------------------------------------
+
+
